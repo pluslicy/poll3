@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.briup.apps.poll.bean.Options;
+import com.briup.apps.poll.bean.OptionsExample;
 import com.briup.apps.poll.bean.Question;
 import com.briup.apps.poll.bean.QuestionExample;
 import com.briup.apps.poll.bean.extend.QuestionVM;
@@ -67,6 +68,21 @@ public class QuestionServiceImpl implements IQuestionService {
 			}
 		} else {
 			//2.2 修改
+			//2.2.1 修改题目信息
+			questionMapper.updateByPrimaryKey(question);
+			//2.2.2 修改选项信息（添加新选项，删除旧选项，对原来选项修改）
+			//1. 删除该题目原有的选项
+			OptionsExample example = new OptionsExample();
+			example.createCriteria().andQuestionIdEqualTo(question.getId());
+			optionsMapper.deleteByExample(example);
+			//2. 重新添加选项
+			long questionId = question.getId();
+			for(Options option : options){
+				//为每个option设置question_id
+				option.setQuestionId(questionId);
+				//保存选项
+				optionsMapper.insert(option);
+			}
 		}
 		
 		//3. 判断是否是简答
@@ -77,6 +93,12 @@ public class QuestionServiceImpl implements IQuestionService {
 		 * 2. 保存选项
 		 */
 		
+		
+	}
+
+	@Override
+	public void deleteById(long id) throws Exception {
+		questionMapper.deleteByPrimaryKey(id);
 		
 	}
 
