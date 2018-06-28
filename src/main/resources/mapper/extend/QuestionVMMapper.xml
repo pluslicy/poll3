@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.briup.apps.poll.dao.extend.QuestionVMMapper">
- 	<select id="selectAll" resultMap="QuestionVMResultMap">
+ 	<select id="selectAll" 
+ 		resultMap="QuestionVMResultMap">
  		select * from poll_question
  		<!-- id,name,questionType -->
+ 	</select>
+ 	
+ 	<select id="selectByQuestionnaireId" 
+ 		parameterType="long" 
+ 		resultMap="QuestionVMResultMap">
+ 		select * from poll_question where id in (
+		 	select question_id 
+		 	from poll_qq
+		 	where questionnaire_id = #{id}
+		 )
+ 		
  	</select>
  	
  	<!-- 定义结果集 -->
