@@ -13,4 +13,6 @@ public interface IQuestionService {
 	void saveOrUpdateQuestionVM(QuestionVM questionVM) throws Exception;
 	
 	void deleteById(long id) throws Exception;
+	
+	void batchDelete(long[] ids) throws Exception;
 }

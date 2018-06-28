@@ -11,4 +11,8 @@ public interface IClazzService {
 	List<ClazzVM> findAllClazzVM() throws Exception;
 	
 	void saveOrUpdateClazz(Clazz clazz) throws Exception;
+	
+	void deleteById(long id) throws Exception;
+	
+	void batchDelete(long[] ids) throws Exception;
 }

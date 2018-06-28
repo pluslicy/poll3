@@ -13,4 +13,6 @@ public interface IQuestionnaireService {
 	void saveOrUpdate(Questionnaire questionnaire , long[] questionIds) throws Exception;
 
 	void deleteById(long id) throws Exception;
+	
+	void batchDelete(long[] ids) throws Exception;
 }

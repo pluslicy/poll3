@@ -39,6 +39,19 @@ public class ClazzServiceImpl implements IClazzService {
 		}
 	}
 
+	@Override
+	public void deleteById(long id) throws Exception {
+		clazzMapper.deleteByPrimaryKey(id);
+		
+	}
+
+	@Override
+	public void batchDelete(long[] ids) throws Exception {
+		for(long id : ids) {
+			clazzMapper.deleteByPrimaryKey(id);
+		}
+	}
+
 }
 
 

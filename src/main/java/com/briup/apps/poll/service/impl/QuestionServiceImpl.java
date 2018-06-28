@@ -84,22 +84,19 @@ public class QuestionServiceImpl implements IQuestionService {
 				optionsMapper.insert(option);
 			}
 		}
-		
-		//3. 判断是否是简答
-		
-		/*
-		 * 保存
-		 * 1. 保存问题
-		 * 2. 保存选项
-		 */
-		
-		
 	}
 
 	@Override
 	public void deleteById(long id) throws Exception {
 		questionMapper.deleteByPrimaryKey(id);
 		
+	}
+
+	@Override
+	public void batchDelete(long[] ids) throws Exception {
+		for(long id : ids) {
+			questionMapper.deleteByPrimaryKey(id);
+		}
 	}
 
 }

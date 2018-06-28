@@ -36,6 +36,19 @@ public class QuestionController {
 		}
 	}
 	
+	@ApiOperation(value="批量删除问题",
+			notes="")
+	@PostMapping("batchDeleteQuestion")
+	public MsgResponse batchDeleteQuestion(long[] ids){
+		try {
+			questionService.batchDelete(ids);
+			return MsgResponse.success("删除成功", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+		
+	}
 	
 	@ApiOperation(value="保存或修改问题",
 			notes="当id不为空表示修改，否则表示更新，保存和更新的时候需要提交选项数据")

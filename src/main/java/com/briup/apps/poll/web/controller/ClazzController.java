@@ -35,7 +35,31 @@ public class ClazzController {
 			return MsgResponse.error(e.getMessage());
 		}
 	}
+	@ApiOperation(value="批量删除班级信息",
+			notes="参数为数组")
+	@PostMapping("batchDeleteClazz")
+	public MsgResponse batchDeleteClazz(long[] ids){
+		try {
+			clazzService.batchDelete(ids);
+			return MsgResponse.success("批量删除成功", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
 	
+	@ApiOperation(value="通过ID删除班级信息",
+			notes="")
+	@GetMapping("deleteClazzById")
+	public MsgResponse deleteClazzById(long id){
+		try {
+			clazzService.deleteById(id);
+			return MsgResponse.success("删除成功", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
 	
 	@ApiOperation(value="查询所有班级",
 			notes="班级中携带班级所属年级信息以及班主任信息")

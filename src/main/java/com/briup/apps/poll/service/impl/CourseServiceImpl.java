@@ -52,7 +52,7 @@ public class CourseServiceImpl implements ICourseService {
 	}
 
 	@Override
-	public void batchDelete(List<Long> ids) throws Exception {
+	public void batchDelete(long[] ids) throws Exception {
 		for(long id : ids){
 			courseMapper.deleteByPrimaryKey(id);
 		}
