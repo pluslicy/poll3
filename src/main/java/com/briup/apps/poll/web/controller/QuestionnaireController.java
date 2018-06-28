@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,32 @@ import io.swagger.annotations.ApiOperation;
 public class QuestionnaireController {
 	@Autowired
 	private IQuestionnaireService qnService;
+	
+	@ApiOperation(value="根据ID删除问卷信息",
+			notes="删除问卷的同时会把问卷和问题的关系解除掉，而问题保留")
+	@GetMapping("deleteQuestionnaireById")
+	public MsgResponse deleteQuestionnaireById(long id){
+		try {
+			qnService.deleteById(id);
+			return MsgResponse.success("删除成功", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
+	
+	@ApiOperation(value="保存或修改问卷信息",
+			notes="如果问卷参数中包含id执行更新操作，否则执行修改操作")
+	@PostMapping("saveOrUpdateQuestionnaire")
+	public MsgResponse saveOrUpdateQuestionnaire(Questionnaire questionnaire,long[] questionIds){
+		try {
+			qnService.saveOrUpdate(questionnaire, questionIds);
+			return MsgResponse.success("保存或修改成功", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
 	
 	@ApiOperation(value="通过ID查询问卷",notes="问卷下具有问题信息")
 	@GetMapping("findQuestionnaireVMById")

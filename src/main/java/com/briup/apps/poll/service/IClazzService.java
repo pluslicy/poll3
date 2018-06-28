@@ -9,4 +9,6 @@ public interface IClazzService {
 	List<Clazz> findAll() throws Exception;
 	
 	List<ClazzVM> findAllClazzVM() throws Exception;
+	
+	void saveOrUpdateClazz(Clazz clazz) throws Exception;
 }

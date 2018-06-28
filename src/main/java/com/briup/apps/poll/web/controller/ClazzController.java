@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,20 @@ import io.swagger.annotations.ApiOperation;
 public class ClazzController {
 	@Autowired
 	private IClazzService clazzService;
+	
+	@ApiOperation(value="保存或修改班级信息",
+			notes="如果参数中包含ID表示修改操作，否则表示保存操作")
+	@PostMapping("saveOrUpdateClazz")
+	public MsgResponse saveOrUpdateClazz(Clazz clazz){
+		try {
+			clazzService.saveOrUpdateClazz(clazz);
+			return MsgResponse.success("保存或更新成功", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
+	
 	
 	@ApiOperation(value="查询所有班级",
 			notes="班级中携带班级所属年级信息以及班主任信息")

@@ -30,4 +30,25 @@ public class ClazzServiceImpl implements IClazzService {
 		return clazzVMMapper.selectAll();
 	}
 
+	@Override
+	public void saveOrUpdateClazz(Clazz clazz) throws Exception {
+		if(clazz.getId()!=null){
+			clazzMapper.updateByPrimaryKey(clazz);
+		} else {
+			clazzMapper.insert(clazz);
+		}
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
