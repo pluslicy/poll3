@@ -5,6 +5,10 @@
  		select * from poll_clazz
  		<!-- id,name,description,grade_id,charge_id -->
  	</select>
+ 	<select id="selectById" parameterType="long" resultMap="ClazzVMResultMap">
+ 		select * from poll_clazz where id = #{id}
+ 		<!-- id,name,description,grade_id,charge_id -->
+ 	</select>
  	
  	<!-- 定义结果集 -->
  	<resultMap type="com.briup.apps.poll.bean.extend.ClazzVM" id="ClazzVMResultMap">
