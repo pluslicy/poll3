@@ -11,7 +11,11 @@ public interface ISurveyService {
 	
 	List<SurveyVM> findAll() throws Exception;
 	
+	//级联查询课调信息
 	SurveyVM findById(long id) throws Exception;
+	
+	//查询课调单表
+	Survey findSurveyById(long id) throws Exception;
 	
 	void deleteById(long id) throws Exception;
 	

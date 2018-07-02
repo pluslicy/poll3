@@ -62,4 +62,9 @@ public class SurveyServiceImpl implements ISurveyService {
 		
 	}
 
+	@Override
+	public Survey findSurveyById(long id) throws Exception {
+		return surveyMapper.selectByPrimaryKey(id);
+	}
+
 }
