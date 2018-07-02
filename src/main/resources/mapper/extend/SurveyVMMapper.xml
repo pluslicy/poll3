@@ -13,6 +13,7 @@
  	<!-- 定义结果集 -->
  	<resultMap type="com.briup.apps.poll.bean.extend.SurveyVM" id="SurveyVMResultMap">
  		<id column="id" property="id"/>
+ 		<result column="average" property="average"/>
  		<result column="status" property="status"/>
  		<result column="code" property="code"/>
  		<result column="surveyDate" property="surveydate"/>

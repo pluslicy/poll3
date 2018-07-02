@@ -14,6 +14,7 @@ import com.briup.apps.poll.bean.extend.SurveyVM;
 import com.briup.apps.poll.service.IAnswersService;
 import com.briup.apps.poll.service.ISurveyService;
 import com.briup.apps.poll.util.MsgResponse;
+import com.briup.apps.poll.vm.SurveyAndAnswersVM;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,6 +54,21 @@ public class SurveyController {
 					total += singleAverage;
 				}
 				double average = total/list.size();
+				surveyVM.setAverage(average);
+				
+				//将平均分保存到数据库中
+				Survey survey = surveyService.findSurveyById(id);
+				//如果数据库中的平均分没有设定，我们再进行设定，否则不做操作
+				if(survey.getAverage()== null){
+					survey.setAverage(average);
+					surveyService.saveOrUpdate(survey);
+				}
+				
+				//如何将surveyVM 和list 返回,封装到一个对象中
+				SurveyAndAnswersVM savm = new SurveyAndAnswersVM();
+				savm.setSurveyVM(surveyVM);
+				savm.setAnswers(list);
+				return MsgResponse.success("success", savm);
 				
 			} else {
 				return MsgResponse.error("课调状态不合法");
@@ -63,6 +79,26 @@ public class SurveyController {
 		return null;
 	}
 	
+	@ApiOperation(value="关闭课调", 
+			notes="只有在课调状态为开启的时候才能关闭课调")
+	@GetMapping("stopSurvey")
+	public MsgResponse stopSurvey(long id){
+		try {
+			//1. 通过id查询出课调
+			Survey survey = surveyService.findSurveyById(id);
+			if(survey!=null && survey.getStatus().equals(Survey.STATUS_BEGIN)){
+				survey.setStatus(Survey.STATUS_CHECK_UN);
+				surveyService.saveOrUpdate(survey);
+				return MsgResponse.success("关闭课调成功",null);
+			} else {
+				return MsgResponse.error("当前课调状态必须为未开启状态");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
 	
 	@ApiOperation(value="开启课调", 
 			notes="只有在课调状态为未开启的时候才能开启课调")

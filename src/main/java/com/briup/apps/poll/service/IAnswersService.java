@@ -8,6 +8,8 @@ public interface IAnswersService {
 	
 	void saveOrUpdate(Answers answers) throws Exception;
 	
+	Answers findById(long id) throws Exception;
+	
 	//通过surveyId查询answers
 	List<Answers> findAnswersBySurveyId(long id) throws Exception;
 }

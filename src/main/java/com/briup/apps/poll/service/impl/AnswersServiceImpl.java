@@ -31,6 +31,11 @@ public class AnswersServiceImpl implements IAnswersService {
 		return answersMapper.selectByExample(example);
 	}
 
+	@Override
+	public Answers findById(long id) throws Exception {
+		return answersMapper.selectByPrimaryKey(id);
+	}
+
 }
 
 
