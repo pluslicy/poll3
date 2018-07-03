@@ -28,6 +28,77 @@ public class SurveyController {
 	@Autowired
 	private IAnswersService answersService;
 	
+	@ApiOperation(value="根据班级ID查询出该班级下所有的已审核的课调", 
+			notes="")
+	@GetMapping("findSurveyByClazzId")
+	public MsgResponse findSurveyByClazzId(long id){
+		try {
+			List<SurveyVM> list = surveyService.findByClazzIdAndCheckPass(id);
+			return MsgResponse.success("success", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
+	
+	
+	
+	@ApiOperation(value="预览课调", 
+			notes="只有当课调状态为审核通过的时候才能预览课调")
+	@GetMapping("previewSurvey")
+	public MsgResponse previewSurvey(long id){
+		try {
+			//1. 课调的信息（课程，班级，讲师，问卷，平均分） SurveyVM
+			SurveyVM surveyVM = surveyService.findById(id);
+			if(surveyVM!=null && 
+					surveyVM.getStatus().equals(Survey.STATUS_CHECK_PASS)){
+				//2. 课调的结果 主观题列表 Answers
+				List<Answers> answers = answersService.findAnswersBySurveyId(id);
+				//3. 将课调信息和课调答卷信息封装到一个对象中
+				SurveyAndAnswersVM savm = new SurveyAndAnswersVM();
+				savm.setSurveyVM(surveyVM);
+				savm.setAnswers(answers);
+				return MsgResponse.success("success", savm);
+			} else {
+				return MsgResponse.error("课调状态不合法");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
+
+	
+	@ApiOperation(value="审核课调", 
+			notes="只有当前课调的状态为未审核的时候才能被审核，"
+					+ "参数id表示课调编号，参数status的取值只能为0/1,"
+					+ "如果是0表示审核不通过，如果是1表示审核通过")
+	@GetMapping("checkSurvey")
+	public MsgResponse checkSurvey(long id,int status){
+		try {
+			//1. 通过id找课调
+			Survey survey = surveyService.findSurveyById(id);
+			//2. 判断当前课调的状态是否为未审核状态
+			if(survey!=null && survey.getStatus().equals(Survey.STATUS_CHECK_UN)){
+				if(status == 0){
+					//2.1 审核不通过
+					survey.setStatus(Survey.STATUS_CHECK_NOPASS);
+				} else {
+					//2.0 审核通过
+					survey.setStatus(Survey.STATUS_CHECK_PASS);
+				}
+				surveyService.saveOrUpdate(survey);
+				return MsgResponse.success("审核完成！", null);
+			} else {
+				return MsgResponse.error("课调状态不合法");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
+	
+	
 	@ApiOperation(value="去审核课调", 
 			notes="返回课调的信息以及课调下所有答卷信息")
 	@GetMapping("toCheckSurvey")

@@ -67,4 +67,9 @@ public class SurveyServiceImpl implements ISurveyService {
 		return surveyMapper.selectByPrimaryKey(id);
 	}
 
+	@Override
+	public List<SurveyVM> findByClazzIdAndCheckPass(long id) throws Exception {
+		return surveyVMMapper.selectByClazzIdAndCheckPass(id);
+	}
+
 }

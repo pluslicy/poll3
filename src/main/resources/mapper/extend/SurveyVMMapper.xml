@@ -9,9 +9,15 @@
  		select * from poll_survey where id = #{id}
  		<!-- id,status,code,surveyDate,course_id,user_id,clazz_id,questionnaire_id -->
  	</select>
+ 	<select id="selectByClazzIdAndCheckPass" parameterType="long" resultMap="SurveyVMBaseResultMap">
+ 		select * from poll_survey 
+ 		where clazz_id = #{id}
+ 		and status = '审核通过'
+ 	</select>
+ 	
  	
  	<!-- 定义结果集 -->
- 	<resultMap type="com.briup.apps.poll.bean.extend.SurveyVM" id="SurveyVMResultMap">
+ 	<resultMap type="com.briup.apps.poll.bean.extend.SurveyVM" id="SurveyVMBaseResultMap">
  		<id column="id" property="id"/>
  		<result column="average" property="average"/>
  		<result column="status" property="status"/>
@@ -32,13 +38,14 @@
  			property="user"
  			select="com.briup.apps.poll.dao.UserMapper.selectByPrimaryKey">
  		</association>
+ 	</resultMap>
+ 	
+ 	<resultMap extends="SurveyVMBaseResultMap"  type="com.briup.apps.poll.bean.extend.SurveyVM" id="SurveyVMResultMap">
  		<association 
  			column="questionnaire_id" 
  			property="qnVM"
  			select="com.briup.apps.poll.dao.extend.QuestionnaireVMMapper.selectById">
  		</association>
- 		
- 		
  	</resultMap>
 </mapper>
 
