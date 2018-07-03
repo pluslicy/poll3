@@ -31,6 +31,8 @@ public interface IUserService {
 	
 	void saveOrUpdate(User user) throws Exception;
 	
+	List<User> query(String keywords) throws Exception;
+	
 	void deleteById(long id) throws Exception;
 	
 	void batchDelete(long[] ids) throws Exception;

@@ -43,6 +43,18 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 	
+	@ApiOperation("查询用户")
+	@GetMapping("query")
+	public MsgResponse deleteById(String keywords) {
+		try {
+			List<User> list = userService.query(keywords);
+			return MsgResponse.success("success", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
+	
 	@ApiOperation("通过Id删除用户信息")
 	@GetMapping("deleteById")
 	public MsgResponse deleteById(@RequestParam long id) {

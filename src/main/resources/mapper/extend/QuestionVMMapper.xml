@@ -15,7 +15,6 @@
 		 	from poll_qq
 		 	where questionnaire_id = #{id}
 		 )
- 		
  	</select>
  	
  	<!-- 定义结果集 -->
@@ -31,14 +30,12 @@
  			select="selectOptionsByQuestionId">
  		</collection>
  	</resultMap>
- 	
  	<!-- 通过题目id查询属于该题目的选项信息 -->
  	<select id="selectOptionsByQuestionId" 
  	parameterType="long"
  	resultType="com.briup.apps.poll.bean.Options">
  		select * from poll_options where question_id = #{id}
  	</select>
- 	
 </mapper>
 
 
