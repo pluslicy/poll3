@@ -7,7 +7,7 @@
  *
 */
 
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(description="校园信息相关接口")
 @RestController
-@RequestMapping("/school")
+@RequestMapping("/manager/school")
 public class SchoolController {
 	@Autowired
 	private ISchoolService schoolService;

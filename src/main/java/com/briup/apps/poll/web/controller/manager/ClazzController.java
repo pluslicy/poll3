@@ -1,4 +1,4 @@
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import java.util.List;
 
@@ -12,16 +12,29 @@ import com.briup.apps.poll.bean.Clazz;
 import com.briup.apps.poll.bean.extend.ClazzVM;
 import com.briup.apps.poll.service.IClazzService;
 import com.briup.apps.poll.util.MsgResponse;
+import com.briup.apps.poll.vm.PageVM;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(description="班级相关接口")
 @RestController
-@RequestMapping("/clazz")
+@RequestMapping("/manager/clazz")
 public class ClazzController {
 	@Autowired
 	private IClazzService clazzService;
+	
+	@ApiOperation(value="过滤班级")
+	@GetMapping("queryClazzVM")
+	public MsgResponse queryClazz(int page,int pageSize,Clazz clazz){
+		try {
+			PageVM<ClazzVM> pageVM = clazzService.query(page, pageSize, clazz);
+			return MsgResponse.success("success", pageVM);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
 	
 	@ApiOperation(value="保存或修改班级信息",
 			notes="如果参数中包含ID表示修改操作，否则表示保存操作")

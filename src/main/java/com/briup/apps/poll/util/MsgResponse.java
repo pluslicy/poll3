@@ -1,13 +1,13 @@
 package com.briup.apps.poll.util;
 
 public class MsgResponse {
-	private Integer stauts;	//状态码	200 成功 500代码异常
+	private Integer status;	//状态码	200 成功 500代码异常
 	private String message;	//错误、成功信息
 	private Object data;	//数据	500 null
 	
 	public static MsgResponse success(String message, Object data){
 		MsgResponse response = new MsgResponse();
-		response.setStauts(200);
+		response.setStatus(200);
 		response.setMessage(message);
 		response.setData(data);
 		return response;
@@ -15,19 +15,22 @@ public class MsgResponse {
 	
 	public static MsgResponse error(String message){
 		MsgResponse response = new MsgResponse();
-		response.setStauts(500);
+		response.setStatus(500);
 		response.setMessage(message);
 		response.setData(null);
 		return response;
 	}
 	
 	
-	public Integer getStauts() {
-		return stauts;
+	
+	public Integer getStatus() {
+		return status;
 	}
-	public void setStauts(Integer stauts) {
-		this.stauts = stauts;
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
+
 	public String getMessage() {
 		return message;
 	}

@@ -1,4 +1,4 @@
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(description="答卷相关接口")
 @RestController
-@RequestMapping("/answer")
+@RequestMapping("/manager/answer")
 public class AnswersController {
 	@Autowired
 	private IAnswersService answersService;
@@ -54,7 +54,6 @@ public class AnswersController {
 		}
 
 	}
-	
 }
 
 

@@ -14,6 +14,7 @@ import com.briup.apps.poll.dao.OptionsMapper;
 import com.briup.apps.poll.dao.QuestionMapper;
 import com.briup.apps.poll.dao.extend.QuestionVMMapper;
 import com.briup.apps.poll.service.IQuestionService;
+import com.briup.apps.poll.vm.PageVM;
 
 @Service
 public class QuestionServiceImpl implements IQuestionService {
@@ -77,11 +78,13 @@ public class QuestionServiceImpl implements IQuestionService {
 			optionsMapper.deleteByExample(example);
 			//2. 重新添加选项
 			long questionId = question.getId();
-			for(Options option : options){
-				//为每个option设置question_id
-				option.setQuestionId(questionId);
-				//保存选项
-				optionsMapper.insert(option);
+			if(options!=null) {
+				for(Options option : options){
+					//为每个option设置question_id
+					option.setQuestionId(questionId);
+					//保存选项
+					optionsMapper.insert(option);
+				}
 			}
 		}
 	}
@@ -99,6 +102,15 @@ public class QuestionServiceImpl implements IQuestionService {
 		}
 	}
 
+	@Override
+	public PageVM<QuestionVM> query(int page, int pageSize, Question question) {
+		PageVM<QuestionVM> pageVM = new PageVM<>();
+		List<QuestionVM> list = questionVMMapper.query(page, pageSize, question);
+		long total = questionVMMapper.count(question);
+		pageVM.setList(list);
+		pageVM.setTotal(total);
+		return pageVM;
+	}
 }
 
 

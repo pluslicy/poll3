@@ -7,7 +7,7 @@
  *
 */
 
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(description="年级相关接口")
 @RestController
-@RequestMapping("/grade")
+@RequestMapping("/manager/grade")
 public class GradeController {
 	@Autowired
 	private IGradeService gradeService;

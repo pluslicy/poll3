@@ -5,6 +5,68 @@
  		select * from poll_survey
  		<!-- id,status,code,surveyDate,course_id,user_id,clazz_id,questionnaire_id -->
  	</select>
+ 	<select id="queryByMonth" resultMap="SurveyVMResultMap">
+ 		select * from poll_survey where surveyDate like #{survey.surveydate}"%" and status = '审核通过'
+ 	</select>
+ 	
+ 	<select id="query" resultMap="SurveyVMResultMap">
+ 		select * from poll_survey
+ 		<where>
+ 			<if test="survey.courseId != null">
+		         course_id = #{survey.courseId}
+		    </if> 
+		    <if test="survey.clazzId != null">
+		        AND clazz_id = #{survey.clazzId}
+		    </if>
+		    <if test="survey.questionnaireId != null">
+		        AND questionnaire_id = #{survey.questionnaireId}
+		    </if>
+		    <if test="survey.userId != null">
+		        AND user_id = #{survey.userId}
+		    </if>
+		    <if test="survey.surveydate != null">
+		        AND surveyDate like #{survey.surveydate}
+		    </if>
+		    <if test="survey.statuses != null">
+		        AND status IN
+		         <foreach collection="survey.statuses" index="index" item="item" open="(" separator="," close=")">
+               		 #{item}       
+		        </foreach>    
+		    </if>
+ 		</where>
+ 		ORDER BY surveyDate DESC
+ 		limit ${page*pageSize},${pageSize}
+ 		
+ 		<!-- id,status,code,surveyDate,course_id,user_id,clazz_id,questionnaire_id -->
+ 	</select>
+ 	<select id="count" resultType="long">
+ 		select count(*) from poll_survey
+ 		<where>
+ 			<if test="survey.courseId != null">
+		         course_id = #{survey.courseId}
+		    </if> 
+		    <if test="survey.clazzId != null">
+		        AND clazz_id = #{survey.clazzId}
+		    </if>
+		    <if test="survey.questionnaireId != null">
+		        AND questionnaire_id = #{survey.questionnaireId}
+		    </if>
+		    <if test="survey.userId != null">
+		        AND user_id = #{survey.userId}
+		    </if>
+		    <if test="survey.surveydate != null">
+		        AND surveyDate like #{survey.surveydate}
+		    </if>
+		   <if test="survey.statuses != null">
+		        AND status IN
+		         <foreach collection="survey.statuses" index="index" item="item" open="(" separator="," close=")">
+               		 #{item}       
+		        </foreach>    
+		    </if>
+ 		</where>
+ 		
+ 	</select>
+ 	
  	<select id="selectById" parameterType="long" resultMap="SurveyVMResultMap">
  		select * from poll_survey where id = #{id}
  		<!-- id,status,code,surveyDate,course_id,user_id,clazz_id,questionnaire_id -->
@@ -36,7 +98,12 @@
  		<association 
  			column="user_id" 
  			property="user"
- 			select="com.briup.apps.poll.dao.UserMapper.selectByPrimaryKey">
+ 			select="com.briup.apps.poll.dao.PollUserMapper.selectByPrimaryKey">
+ 		</association>
+ 		<association 
+ 			column="questionnaire_id" 
+ 			property="qnVM"
+ 			select="com.briup.apps.poll.dao.extend.QuestionnaireVMMapper.selectById">
  		</association>
  	</resultMap>
  	

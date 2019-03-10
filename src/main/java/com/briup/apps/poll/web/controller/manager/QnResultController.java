@@ -7,7 +7,7 @@
  *
 */
 
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -34,21 +34,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.briup.apps.poll.bean.Answers;
-import com.briup.apps.poll.bean.Clazz;
 import com.briup.apps.poll.bean.Course;
-import com.briup.apps.poll.bean.Survey;
-import com.briup.apps.poll.bean.User;
+import com.briup.apps.poll.bean.PollUser;
 import com.briup.apps.poll.bean.extend.ClazzVM;
 import com.briup.apps.poll.bean.extend.QuestionnaireVM;
 import com.briup.apps.poll.bean.extend.SurveyVM;
 import com.briup.apps.poll.service.IAnswersService;
 import com.briup.apps.poll.service.ISurveyService;
 import com.briup.apps.poll.util.ExcelUtils;
-import com.briup.apps.poll.util.MsgResponse;
-import com.briup.apps.poll.vm.SurveyAndAnswersVM;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * ClassName:问卷结果控制器 <br/>
@@ -62,7 +59,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(description="问卷结果相关接口")
 @RestController
-@RequestMapping("result")
+@RequestMapping("/manager/result")
 public class QnResultController {
 	@Autowired
 	private ISurveyService surveyService;
@@ -78,7 +75,7 @@ public class QnResultController {
 			SurveyVM surveyVM = surveyService.findById(id);
 			ClazzVM clazz = surveyVM.getClazzVM();
 			Course course = surveyVM.getCourse();
-			User user = surveyVM.getUser();
+			PollUser user = surveyVM.getUser();
 			QuestionnaireVM qnVM = surveyVM.getQnVM();
 			
 			List<Answers> answers = answersService.findAnswersBySurveyId(id);
@@ -95,9 +92,7 @@ public class QnResultController {
 			//2.3.1（标题行）
 			XSSFRow row = sheet.createRow(0);
 			//2.4在row中创建一列
-			String title = 
-					surveyVM.getClazzVM().getName()+
-					surveyVM.getQnVM().getName();
+			String title = clazz.getName()+qnVM.getName();
 			XSSFCell cell = row.createCell(0);
 			cell.setCellValue(title);
 			cell.setCellStyle(titleCellStyle);
@@ -109,7 +104,7 @@ public class QnResultController {
 			XSSFCell cell10 = socendRow.createCell(0);
 			cell10.setCellValue("讲师名称");
 			XSSFCell cell11 = socendRow.createCell(1);
-			cell11.setCellValue(user.getName());
+			cell11.setCellValue(user.getNickname());
 			XSSFCell cell12 = socendRow.createCell(2);
 			cell12.setCellValue("班级名称");
 			XSSFCell cell13 = socendRow.createCell(3);
@@ -153,7 +148,7 @@ public class QnResultController {
 	
 	
 	
-	
+	@ApiIgnore
 	@ApiOperation(value="测试poi",notes="注意！测试的时候请将地址粘贴到浏览器地址栏测试",produces="application/octet-stream")
 	@GetMapping("testDownload")
 	public void testDownload(HttpServletResponse response) {
@@ -170,10 +165,10 @@ public class QnResultController {
 			// 将字体样式添加到单元格样式中 
 			cellStyle.setFont(fontStyle);
 			cellStyle.setAlignment(HorizontalAlignment.CENTER);
-			cellStyle.setBorderBottom(BorderStyle.THIN);; //下边框    
-			cellStyle.setBorderLeft(BorderStyle.THIN);//左边框    
-			cellStyle.setBorderTop(BorderStyle.THIN);//上边框    
-			cellStyle.setBorderRight(BorderStyle.THIN);//右边框
+			cellStyle.setBorderBottom(BorderStyle.MEDIUM);; //下边框    
+			cellStyle.setBorderLeft(BorderStyle.MEDIUM);//左边框    
+			cellStyle.setBorderTop(BorderStyle.MEDIUM);//上边框    
+			cellStyle.setBorderRight(BorderStyle.MEDIUM);//右边框
 			
 			
 			// 在索引0的位置创建行（最顶端的行）
@@ -213,7 +208,7 @@ public class QnResultController {
 		}
 	}
 	
-	
+	@ApiIgnore
 	@ApiOperation(value="下载问卷结果",notes="注意！测试的时候请将地址粘贴到浏览器地址栏测试",produces="application/octet-stream")
 	@GetMapping("downLoadQnResult")
 	public void downLoadQnResult(HttpServletResponse response,long id) {

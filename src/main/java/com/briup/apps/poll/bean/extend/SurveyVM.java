@@ -1,7 +1,7 @@
 package com.briup.apps.poll.bean.extend;
 
 import com.briup.apps.poll.bean.Course;
-import com.briup.apps.poll.bean.User;
+import com.briup.apps.poll.bean.PollUser;
 
 public class SurveyVM {
 	private Long id;
@@ -12,7 +12,7 @@ public class SurveyVM {
 	
 	private Course course;
 	private ClazzVM clazzVM;
-	private User user;
+	private PollUser user;
 	private QuestionnaireVM qnVM;
 	public Long getId() {
 		return id;
@@ -50,10 +50,11 @@ public class SurveyVM {
 	public void setClazzVM(ClazzVM clazzVM) {
 		this.clazzVM = clazzVM;
 	}
-	public User getUser() {
+	
+	public PollUser getUser() {
 		return user;
 	}
-	public void setUser(User user) {
+	public void setUser(PollUser user) {
 		this.user = user;
 	}
 	public QuestionnaireVM getQnVM() {

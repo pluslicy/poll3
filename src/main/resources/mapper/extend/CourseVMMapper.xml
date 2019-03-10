@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.apps.poll.dao.extend.CourseVMMapper">
+ 	<select id="query" resultMap="CourseVMResultMap">
+ 		select * from poll_course
+ 		<where>
+		    <if test="course.name != null">
+		        name LIKE #{course.name}
+		    </if>
+ 		</where>
+ 		ORDER BY name ASC
+ 		limit ${page*pageSize},${pageSize}
+ 	</select>
+ 	<select id="count" resultType="long">
+ 		select count(*) from poll_course
+ 		<where>
+		    <if test="course.name != null">
+		        name LIKE #{course.name}
+		    </if>
+ 		</where>
+ 	</select>
+ 	
+ 	<!-- 定义结果集 -->
+ 	<resultMap type="com.briup.apps.poll.bean.Course" id="CourseVMResultMap">
+	    <id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="period" jdbcType="INTEGER" property="period" />
+ 		<result column="description" property="description"/>
+ 	</resultMap>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

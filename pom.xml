@@ -67,6 +67,24 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.17</version>
 		</dependency>
+		<!-- mybatis-generator插件 -->
+		<dependency>
+			<groupId>com.itfsw</groupId>
+			<artifactId>mybatis-generator-plugin</artifactId>
+			<version>1.2.10</version>
+		</dependency>
+		<!-- springsecurity -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+		<dependency>
+		    <groupId>net.sf.json-lib</groupId>
+		    <artifactId>json-lib</artifactId>
+		    <version>2.4</version>
+		    <classifier>jdk15</classifier>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -3,8 +3,12 @@ package com.briup.apps.poll.service;
 import java.util.List;
 
 import com.briup.apps.poll.bean.Course;
+import com.briup.apps.poll.vm.PageVM;
 
 public interface ICourseService {
+	PageVM<Course> query(int page,int pageSize,Course course) ;
+	
+	
 	/**
 	 * 查询所有
 	 * */

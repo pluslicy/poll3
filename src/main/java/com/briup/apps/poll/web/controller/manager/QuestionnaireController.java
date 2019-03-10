@@ -1,4 +1,4 @@
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(description="问卷相关的接口")
 @RestController
-@RequestMapping("/questionnaire")
+@RequestMapping("/manager/questionnaire")
 public class QuestionnaireController {
 	@Autowired
 	private IQuestionnaireService qnService;
@@ -45,12 +45,12 @@ public class QuestionnaireController {
 			return MsgResponse.success("删除成功", null);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return MsgResponse.error(e.getMessage());
+			return MsgResponse.error("删除异常！请删除关联信息");
 		}
 	}
 	
 	@ApiOperation(value="保存或修改问卷信息",
-			notes="如果问卷参数中包含id执行更新操作，否则执行修改操作")
+			notes="如果问卷参数中包含id执行更新操作，否则执行修改操作;修改的时候不能修改关联的问题信息")
 	@PostMapping("saveOrUpdateQuestionnaire")
 	public MsgResponse saveOrUpdateQuestionnaire(Questionnaire questionnaire,long[] questionIds){
 		try {

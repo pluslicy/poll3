@@ -5,6 +5,33 @@
  		select * from poll_clazz
  		<!-- id,name,description,grade_id,charge_id -->
  	</select>
+ 	
+ 	<select id="query" resultMap="ClazzVMResultMap">
+ 		select * from poll_clazz
+ 		<where>
+ 			<if test="clazz.gradeId != null">
+		         grade_id = #{clazz.gradeId}
+		    </if> 
+		    <if test="clazz.name != null">
+		         AND name LIKE #{clazz.name}
+		    </if>
+ 		</where>
+ 		ORDER BY name DESC
+ 		limit ${page*pageSize},${pageSize}
+ 		<!-- id,name,description,grade_id,charge_id -->
+ 	</select>
+ 	<select id="count" resultType="long">
+ 		select count(*) from poll_clazz
+ 		<where>
+ 			<if test="clazz.gradeId != null">
+		         grade_id = #{clazz.gradeId}
+		    </if> 
+		     <if test="clazz.name != null">
+		         AND name LIKE #{clazz.name}
+		    </if>
+ 		</where>
+ 	</select>
+ 	
  	<select id="selectById" parameterType="long" resultMap="ClazzVMResultMap">
  		select * from poll_clazz where id = #{id}
  		<!-- id,name,description,grade_id,charge_id -->
@@ -14,6 +41,8 @@
  	<resultMap type="com.briup.apps.poll.bean.extend.ClazzVM" id="ClazzVMResultMap">
  		<id column="id" property="id"/>
  		<result column="name" property="name"/>
+ 		<result column="survey_number" jdbcType="INTEGER" property="surveyNumber" />
+    		<result column="student_number" jdbcType="INTEGER" property="studentNumber" />
  		<result column="description" property="description"/>
  		<association 
  			column="grade_id" 
@@ -23,7 +52,7 @@
  		<association 
  			column="charge_id" 
  			property="charge"
- 			select="com.briup.apps.poll.dao.UserMapper.selectByPrimaryKey">
+ 			select="com.briup.apps.poll.dao.PollUserMapper.selectByPrimaryKey">
  		</association>
  	</resultMap>
 </mapper>

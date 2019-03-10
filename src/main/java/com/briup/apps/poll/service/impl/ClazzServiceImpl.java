@@ -11,6 +11,7 @@ import com.briup.apps.poll.bean.extend.ClazzVM;
 import com.briup.apps.poll.dao.ClazzMapper;
 import com.briup.apps.poll.dao.extend.ClazzVMMapper;
 import com.briup.apps.poll.service.IClazzService;
+import com.briup.apps.poll.vm.PageVM;
 
 @Service
 public class ClazzServiceImpl implements IClazzService {
@@ -33,7 +34,7 @@ public class ClazzServiceImpl implements IClazzService {
 	@Override
 	public void saveOrUpdateClazz(Clazz clazz) throws Exception {
 		if(clazz.getId()!=null){
-			clazzMapper.updateByPrimaryKey(clazz);
+			clazzMapper.updateByPrimaryKeyWithBLOBs(clazz);
 		} else {
 			clazzMapper.insert(clazz);
 		}
@@ -50,6 +51,28 @@ public class ClazzServiceImpl implements IClazzService {
 		for(long id : ids) {
 			clazzMapper.deleteByPrimaryKey(id);
 		}
+	}
+
+	@Override
+	public PageVM<ClazzVM> query(int page, int pageSize, Clazz clazz) {
+		PageVM<ClazzVM> pageVM = new PageVM<>();
+		// 设置模糊查询条件
+		if(clazz.getName()!=null) {
+			clazz.setName("%"+clazz.getName()+"%");
+		}
+		
+		List<ClazzVM> list = clazzVMMapper.query(page, pageSize, clazz);
+		long total = clazzVMMapper.count(clazz);
+		pageVM.setList(list);
+		pageVM.setPage(page);
+		pageVM.setPageSize(pageSize);
+		pageVM.setTotal(total);
+		return pageVM;
+	}
+
+	@Override
+	public Clazz findById(long id) {
+		return clazzMapper.selectByPrimaryKey(id);
 	}
 
 }

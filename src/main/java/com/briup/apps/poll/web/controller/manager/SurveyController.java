@@ -1,32 +1,77 @@
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.briup.apps.poll.bean.Answers;
+import com.briup.apps.poll.bean.Clazz;
 import com.briup.apps.poll.bean.Survey;
+import com.briup.apps.poll.bean.SurveyLog;
 import com.briup.apps.poll.bean.extend.SurveyVM;
 import com.briup.apps.poll.service.IAnswersService;
+import com.briup.apps.poll.service.IClazzService;
+import com.briup.apps.poll.service.ISurveyLogService;
 import com.briup.apps.poll.service.ISurveyService;
 import com.briup.apps.poll.util.MsgResponse;
+import com.briup.apps.poll.vm.PageVM;
 import com.briup.apps.poll.vm.SurveyAndAnswersVM;
+import com.briup.apps.poll.vm.SurveyPVM;
+import com.briup.apps.poll.vm.SurveyStatisticsVM;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(description="课调相关接口")
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/manager/survey")
 public class SurveyController {
 	@Autowired
 	private ISurveyService surveyService;
 	@Autowired
 	private IAnswersService answersService;
+	@Autowired
+	private IClazzService clazzService;
+	@Autowired
+	private ISurveyLogService surveyLogService;
+	
+	@ApiOperation(value="多条件查询课调信息", 
+			notes="")
+	@PostMapping("querySurvey")
+	public MsgResponse querySurvey(int page,int pageSize,SurveyPVM survey){
+		try {
+			PageVM<SurveyVM> pageVm = surveyService.query(page, pageSize, survey);
+			return MsgResponse.success("success", pageVm);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
+	
+	@ApiOperation(value="按照月份进行统计", 
+			notes="")
+	@PostMapping("statisticsByMonth")
+	public MsgResponse statisticsByMonth(@RequestParam("month") String month){
+		try {
+			List<SurveyStatisticsVM> list = surveyService.statisticsByMonth(month);
+			return MsgResponse.success("success", list);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+		
+		
+	}
+	
+	
+	
 	
 	@ApiOperation(value="根据班级ID查询出该班级下所有的已审核的课调", 
 			notes="")
@@ -40,8 +85,6 @@ public class SurveyController {
 			return MsgResponse.error(e.getMessage());
 		}
 	}
-	
-	
 	
 	@ApiOperation(value="预览课调", 
 			notes="只有当课调状态为审核通过的时候才能预览课调")
@@ -86,6 +129,12 @@ public class SurveyController {
 				} else {
 					//2.0 审核通过
 					survey.setStatus(Survey.STATUS_CHECK_PASS);
+					// 设置课调次数
+					long clazzId = survey.getClazzId();
+					Clazz clazz = clazzService.findById(clazzId);
+					int clazzNumber = clazz.getSurveyNumber()==null?0:clazz.getSurveyNumber();
+					clazz.setSurveyNumber(++clazzNumber);
+					clazzService.saveOrUpdateClazz(clazz);
 				}
 				surveyService.saveOrUpdate(survey);
 				return MsgResponse.success("审核完成！", null);
@@ -124,14 +173,17 @@ public class SurveyController {
 					double singleAverage = singleTotal/arr.length;
 					total += singleAverage;
 				}
-				double average = total/list.size();
-				surveyVM.setAverage(average);
+				double average =total==0 ? 0: total/list.size();
+				DecimalFormat df = new DecimalFormat("#.00");
+				double av = Double.parseDouble(df.format(average));
+				surveyVM.setAverage(av);
 				
 				//将平均分保存到数据库中
 				Survey survey = surveyService.findSurveyById(id);
 				//如果数据库中的平均分没有设定，我们再进行设定，否则不做操作
-				if(survey.getAverage()== null){
-					survey.setAverage(average);
+				if(survey.getAverage()== null || survey.getAverage().isEmpty()){
+					System.out.println("==============="+av+","+average);
+					survey.setAverage(av+"");
 					surveyService.saveOrUpdate(survey);
 				}
 				
@@ -140,7 +192,6 @@ public class SurveyController {
 				savm.setSurveyVM(surveyVM);
 				savm.setAnswers(list);
 				return MsgResponse.success("success", savm);
-				
 			} else {
 				return MsgResponse.error("课调状态不合法");
 			}
@@ -266,12 +317,21 @@ public class SurveyController {
 			return MsgResponse.error(e.getMessage());
 		}
 	}
-
 	
 	
-	
-	
-	
+	@ApiOperation(value="查询课调进度")
+	@GetMapping("surveyProcess")	
+	public MsgResponse surveyProcess(long id){
+		try {
+			SurveyLog log = new SurveyLog();
+			log.setSurveyId(id);
+			List<SurveyLog> list = surveyLogService.query(log);
+			return MsgResponse.success("success", list.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MsgResponse.error(e.getMessage());
+		}
+	}
 	
 	
 	

@@ -1,4 +1,4 @@
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import java.util.List;
 
@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.briup.apps.poll.bean.Course;
 import com.briup.apps.poll.service.ICourseService;
 import com.briup.apps.poll.util.MsgResponse;
+import com.briup.apps.poll.vm.PageVM;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(description="课程相关的接口")
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/manager/course")
 public class CourseController {
 	
 	@Autowired
@@ -65,6 +66,20 @@ public class CourseController {
 			List<Course> list = courseService.findAll();
 			// 返回成功信息
 			return MsgResponse.success("success", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 返回失败信息
+			return MsgResponse.error(e.getMessage()) ;
+		}
+	}
+	
+	@ApiOperation(value="过滤课程信息")
+	@GetMapping("queryCourse")
+	public MsgResponse queryCourse(int page ,int pageSize , Course course){
+		try {
+			PageVM<Course> pageVM = courseService.query(page, pageSize, course);
+			// 返回成功信息
+			return MsgResponse.success("success", pageVM);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// 返回失败信息

@@ -6,6 +6,26 @@
  		select * from poll_question
  		<!-- id,name,questionType -->
  	</select>
+ 	<select id="query" 
+ 		resultMap="QuestionVMResultMap">
+ 		select * from poll_question
+ 		<where>
+ 			<if test="question.questiontype != null">
+		         questionType = #{question.questiontype}
+		    </if> 
+ 		</where>
+ 		limit ${page*pageSize},${pageSize}
+ 	</select>
+ 	<select id="count" 
+ 		resultType="long">
+ 		select count(*) from poll_question
+ 		<where>
+ 			<if test="question.questiontype != null">
+		         questionType = #{question.questiontype}
+		    </if> 
+ 		</where>
+ 		<!-- id,name,questionType -->
+ 	</select>
  	
  	<select id="selectByQuestionnaireId" 
  		parameterType="long" 

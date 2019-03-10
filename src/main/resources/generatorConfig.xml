@@ -4,11 +4,11 @@
   "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <!-- mybatis-generator的核心配置文件 -->
 <generatorConfiguration>
-  <classPathEntry location="C:\briup_3\repository\mysql\mysql-connector-java\5.1.46\mysql-connector-java-5.1.46.jar" />
+  <classPathEntry location="/Users/lichunyu/springboot/repository/mysql/mysql-connector-java/5.1.45/mysql-connector-java-5.1.45.jar" />
 
   <context id="DB2Tables" targetRuntime="MyBatis3">
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-        connectionURL="jdbc:mysql://127.0.0.1:3306/poll2.0"
+        connectionURL="jdbc:mysql://127.0.0.1:3306/poll3.0"
         userId="root"
         password="root">
     </jdbcConnection>
@@ -34,7 +34,6 @@
       <property name="enableSubPackages" value="true" />
     </javaClientGenerator>
 
-	<table tableName="poll_survey" domainObjectName="Survey" ></table>
 	
 	<!-- 映射配置 -->
 	<!-- 
@@ -49,9 +48,12 @@
     <table tableName="poll_qq" domainObjectName="QuestionnaireQuestion" ></table>
     <table tableName="poll_survey" domainObjectName="Survey" ></table>
     <table tableName="poll_answers" domainObjectName="Answers" ></table>
+    <table tableName="poll_user" domainObjectName="PollUser" ></table>
   	-->
+  	<table tableName="poll_survey_log" domainObjectName="SurveyLog" ></table>
+  	
  
- 
+
  
  
  

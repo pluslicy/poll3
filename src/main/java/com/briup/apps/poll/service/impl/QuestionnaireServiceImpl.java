@@ -55,7 +55,8 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
 		} else {
 			//1.2 修改
 			//1.2.1 修改问卷信息
-			qnMapper.updateByPrimaryKey(questionnaire);
+			qnMapper.updateByPrimaryKeyWithBLOBs(questionnaire);
+			
 			long questionnaireId = questionnaire.getId();
 			//1.2.2 删除问卷下所有的问卷问题关系
 			// delete from poll_qq where questionnaire_id = #{id}
@@ -69,6 +70,7 @@ public class QuestionnaireServiceImpl implements IQuestionnaireService {
 				qq.setQuestionnaireId(questionnaireId);
 				qqMapper.insert(qq);
 			}
+			
 		}
 	}
 

@@ -11,7 +11,11 @@ package com.briup.apps.poll.service;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.briup.apps.poll.bean.PollUser;
 import com.briup.apps.poll.bean.User;
+import com.briup.apps.poll.vm.PageVM;
 
 
 /**
@@ -24,17 +28,26 @@ import com.briup.apps.poll.bean.User;
  * @since    JDK 1.6
  * @see 	 
  */
-public interface IUserService {
-	List<User> findAll() throws Exception;
+public interface IPOllUserService {
+	//更新用户信息	
+	UserDetails updateUser(User user) throws Exception;
+	//更新用户密码	
+	void updateUserPassword(User user) throws Exception;
 	
-	User findById(long id) throws Exception;
+	List<PollUser> findAllEnabledUser();
 	
-	void saveOrUpdate(User user) throws Exception;
 	
-	List<User> query(String keywords) throws Exception;
+	List<PollUser> findAll();
+	
+	void saveOrUpdate(PollUser user) throws Exception;
+	
+	void register(User user) throws Exception;
+	
+	PageVM<User> query(int page ,int pageSize, String keywords);
 	
 	void deleteById(long id) throws Exception;
 	
 	void batchDelete(long[] ids) throws Exception;
+	
 }
 

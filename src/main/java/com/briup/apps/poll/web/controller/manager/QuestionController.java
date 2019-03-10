@@ -1,4 +1,4 @@
-package com.briup.apps.poll.web.controller;
+package com.briup.apps.poll.web.controller.manager;
 
 import java.util.List;
 
@@ -12,13 +12,14 @@ import com.briup.apps.poll.bean.Question;
 import com.briup.apps.poll.bean.extend.QuestionVM;
 import com.briup.apps.poll.service.IQuestionService;
 import com.briup.apps.poll.util.MsgResponse;
+import com.briup.apps.poll.vm.PageVM;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(description="题库相关的接口")
 @RestController
-@RequestMapping("/question")
+@RequestMapping("/manager/question")
 public class QuestionController {
 	@Autowired
 	private IQuestionService questionService;
@@ -64,6 +65,18 @@ public class QuestionController {
 		
 	}
 	
+	@ApiOperation(value="分页查询所有问题",notes="单表")
+	@GetMapping("queryQuestion")
+	public MsgResponse queryQuestion(int page,int pageSize,Question question){
+		try {
+			PageVM<QuestionVM> pageVM = questionService.query(page, pageSize, question);
+			return MsgResponse.success("success", pageVM);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 返回失败信息
+			return MsgResponse.error(e.getMessage()) ;
+		}
+	}
 	
 	@ApiOperation(value="查询所有问题",notes="单表")
 	@GetMapping("findAllQuestion")

@@ -37,7 +37,7 @@ public class GradeServiceImpl implements IGradeService {
 	@Override
 	public List<Grade> findAll() throws Exception {
 		GradeExample example = new GradeExample();
-		return gradeMapper.selectByExample(example);
+		return gradeMapper.selectByExampleWithBLOBs(example);
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class GradeServiceImpl implements IGradeService {
 	@Override
 	public void saveOrUpdate(Grade grade) throws Exception {
 		if(grade.getId()!=null) {
-			gradeMapper.updateByPrimaryKey(grade);
+			gradeMapper.updateByPrimaryKeyWithBLOBs(grade);
 		} else {
 			gradeMapper.insert(grade);
 		}

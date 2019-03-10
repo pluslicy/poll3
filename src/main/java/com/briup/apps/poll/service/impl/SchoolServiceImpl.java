@@ -41,7 +41,7 @@ public class SchoolServiceImpl implements ISchoolService {
 	@Override
 	public void saveOrUpdate(School school) throws Exception {
 		if(school.getId()!=null) {
-			schoolMapper.updateByPrimaryKey(school);
+			schoolMapper.updateByPrimaryKeyWithBLOBs(school);
 		} else {
 			schoolMapper.insert(school);
 		}
