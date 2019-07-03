@@ -146,8 +146,6 @@ public class QnResultController {
 	}
 	
 	
-	
-	
 	@ApiIgnore
 	@ApiOperation(value="测试poi",notes="注意！测试的时候请将地址粘贴到浏览器地址栏测试",produces="application/octet-stream")
 	@GetMapping("testDownload")
